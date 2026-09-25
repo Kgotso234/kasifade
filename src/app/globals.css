@@ -1,26 +1,19 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-forest: #12291F;        /* painted-container green (main) */
+  --color-forest-light: #1B3A2C;  /* boards, panels */
+  --color-cream: #F1E9D6;         /* painted plaster */
+  --color-mustard: #E3A62A;       /* the one accent */
+  --color-mustard-hover: #F0B840;
+  --color-brick: #B5432F;         /* tiny details only */
+  --radius-btn: 0.75rem; /* soft corners. Use 9999px for full pills */
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bungee), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
