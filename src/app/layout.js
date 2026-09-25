@@ -1,4 +1,5 @@
 import { Bungee, Plus_Jakarta_Sans } from "next/font/google";
+import WelcomePopup from "@/components/WelcomePopup";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         <main>{children}</main>
         <Footer />
+        <WelcomePopup />
       </body>
     </html>
   );
