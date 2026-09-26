@@ -8,10 +8,6 @@ export default function WelcomePopup() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const hasSeenPopup = localStorage.getItem("kasifade-welcome-popup");
-
-    if (hasSeenPopup) return;
-
     const timer = setTimeout(() => {
       setIsOpen(true);
     }, 3000);
@@ -21,7 +17,6 @@ export default function WelcomePopup() {
 
   const closePopup = () => {
     setIsOpen(false);
-    localStorage.setItem("kasifade-welcome-popup", "true");
   };
 
   if (!isOpen) return null;
