@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { business, formatPrice } from "@/data/service";
 import { getServices } from "@/lib/services";
