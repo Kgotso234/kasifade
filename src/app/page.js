@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   business,
   hours,
-  services,
   barbers,
   formatPrice,
   startingPrice,
@@ -20,14 +20,6 @@ const btnGhost =
 const arrowBtn =
   "flex h-10 w-10 items-center justify-center rounded-full border border-mustard/50 text-mustard transition-colors hover:bg-mustard hover:text-forest";
 
-function ArrowIcon({ direction }) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      {direction === "left" ? <path d="M15 6l-6 6 6 6" /> : <path d="M9 6l6 6-6 6" />}
-    </svg>
-  );
-}
-
 function Carousel({ children }) {
   const trackRef = useRef(null);
   const scrollBy = (dir) => {
@@ -37,10 +29,10 @@ function Carousel({ children }) {
     <div>
       <div className="mb-4 hidden justify-end gap-3 sm:flex">
         <button type="button" onClick={() => scrollBy(-1)} className={arrowBtn} aria-label="Scroll left">
-          <ArrowIcon direction="left" />
+          <ChevronLeft size={16} />
         </button>
         <button type="button" onClick={() => scrollBy(1)} className={arrowBtn} aria-label="Scroll right">
-          <ArrowIcon direction="right" />
+          <ChevronRight size={16} />
         </button>
       </div>
       <div
@@ -54,6 +46,17 @@ function Carousel({ children }) {
 }
 
 export default function Home() {
+  const [services, setServices] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/services")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setServices(data.services);
+      })
+      .catch((err) => console.error("Failed to load services:", err));
+  }, []);
+
   return (
     <div>
       {/* 1. HERO */}
@@ -76,8 +79,13 @@ export default function Home() {
             Precision cuts. Clean fades. Good vibes. This is where style meets pride.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href={business.bookingHref} className={btnPrimary}>BOOK AN APPOINTMENT</Link>
-            <Link href="#services" className={btnGhost}>OUR SERVICES →</Link>
+            <Link href={business.bookingHref} className={btnPrimary}>
+              BOOK AN APPOINTMENT
+            </Link>
+            <Link href="#services" className={btnGhost}>
+              OUR SERVICES
+              <ChevronRight size={16} />
+            </Link>
           </div>
           <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-2 border-t border-cream/20 pt-5 text-xs font-medium text-cream/80">
             <li>Open 7 days</li>
@@ -102,34 +110,43 @@ export default function Home() {
           </div>
 
           <div className="mt-10">
-            <Carousel>
-              {services.map(({ id, name, description, price }) => (
-                <Link
-                  key={id}
-                  href={business.bookingHref}
-                  className="group w-64 flex-shrink-0 snap-start overflow-hidden rounded-btn border border-forest/15 bg-forest text-cream transition-transform hover:-translate-y-1"
-                >
-                  {/* Placeholder image block */}
-                  <div className="flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-forest-light to-forest">
-                    <span className="font-display text-4xl text-cream/20">
-                      {name.charAt(0)}
-                    </span>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-display text-lg">{name}</h3>
-                    <p className="mt-1 text-xs text-cream/60">{description}</p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <span className="font-display text-lg text-mustard">
-                        {formatPrice(price)}
-                      </span>
-                      <span className="text-mustard transition-transform group-hover:translate-x-1">
-                        <ArrowIcon direction="right" />
-                      </span>
+            {services.length === 0 ? (
+              <p className="text-sm text-forest/60">Loading services…</p>
+            ) : (
+              <Carousel>
+                {services.map(({ id, name, description, price, image }) => (
+                  <Link
+                    key={id}
+                    href={business.bookingHref}
+                    className="group w-64 flex-shrink-0 snap-start overflow-hidden rounded-btn border border-forest/15 bg-forest text-cream transition-transform hover:-translate-y-1"
+                  >
+                    {/* Placeholder image block */}
+                    <div className="flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-forest-light to-forest">
+                      {/* <span className="font-display text-4xl text-cream/20">
+                        {image}
+                      </span> */}
+                      <img
+                        src={image}
+                        alt={`${name}`}
+                        className="h-[250px] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
                     </div>
-                  </div>
-                </Link>
-              ))}
-            </Carousel>
+                    <div className="p-5">
+                      <h3 className="font-display text-lg">{name}</h3>
+                      <p className="mt-1 text-xs text-cream/60">{description}</p>
+                      <div className="mt-4 flex items-center justify-between">
+                        <span className="font-display text-lg text-mustard">
+                          {formatPrice(price)}
+                        </span>
+                        <span className="text-mustard transition-transform group-hover:translate-x-1">
+                          <ChevronRight size={16} />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </Carousel>
+            )}
           </div>
         </div>
       </section>

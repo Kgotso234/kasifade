@@ -44,101 +44,162 @@ export const bookingSettings = {
 
 export const services = [
   {
-    id: "classic-cut",
-    name: "Classic Cut",
+    id: "chiskop",
+    name: "Chiskop",
     price: 250,
     duration: 30,
-    description: "A clean, timeless cut finished to your style.",
+    description: "A deeply popular and classic clean-shaven look.",
     image:
-      "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=1000&q=85",
+      "/images/chiskop.jpg",
   },
   {
-    id: "skin-fade",
-    name: "Skin Fade",
+    id: "low-cut-chillas",
+    name: "Low Cut / Chillas",
     price: 280,
     duration: 45,
-    description: "Precision fading with sharp lines and a clean finish.",
+    description: "Very short, uniform clipper cut, paired with a clean hairline.",
     image:
-      "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=1000&q=85",
+      "/images/low-cut.jpg",
   },
   {
-    id: "beard-trim",
-    name: "Beard Trim",
+    id: "three-step-fade",
+    name: "Three-Step Fade",
     price: 150,
     duration: 20,
-    description: "Shape, line-up and refine your beard.",
+    description: "Distinct tiered transition with three visible, sharp gradient lines.",
     image:
-      "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1000&q=85",
+      "/images/three-stepfade.jpg",
   },
   {
-    id: "cut-and-beard",
-    name: "Cut + Beard",
+    id: "taper-fade",
+    name: "Taper Fade",
     price: 350,
     duration: 60,
-    description: "The complete Kasifade session.",
+    description: "Gradual fading at the sideburns and nape, leaving bulk on top.",
     image:
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1000&q=85",
+      "/images/taperfade.jpg",
   },
   {
-    id: "kids-cut",
-    name: "Kids Cut",
+    id: "line-up-chiszzp",
+    name: "Line-Up / Chiszzp",
     price: 180,
     duration: 30,
-    description: "Fresh, clean cuts for the younger generation.",
+    description: "Precision razor work to map out sharp, geometric straight edges.",
     image:
-      "https://images.unsplash.com/photo-1599351431610-8a8a8a8a8a8a?auto=format&fit=crop&w=1000&q=85",
+      "/images/lineup.jpg",
   },
   {
-    id: "executive-grooming",
-    name: "Executive Grooming",
+    id: "sponge-twist",
+    name: "Sponge Twist",
     price: 450,
     duration: 75,
-    description: "The full experience, from cut to finish.",
+    description: "Neat coils and twists created on top with faded sides.",
     image:
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1000&q=85",
+      "/images/spongetwist.jpg",
   },
 ];
 
 export const barbers = [
   {
-    id: "sipho",
-    name: "Sipho Mokoena",
-    role: "Senior Barber",
-    specialty: "Precision fades & classic cuts",
-    services: [
-      "classic-cut",
-      "skin-fade",
-      "cut-and-beard",
-      "executive-grooming",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: "thabo",
-    name: "Thabo Molefe",
-    role: "Fade Specialist",
-    specialty: "Skin fades & modern styles",
-    services: ["skin-fade", "beard-trim", "cut-and-beard"],
-    image:
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: "jordan",
-    name: "Jordan Naidoo",
+    id: "barber-1",
+    name: "Sipho",
     role: "Master Barber",
-    specialty: "Classic grooming & beard shaping",
-    services: [
-      "classic-cut",
-      "beard-trim",
-      "kids-cut",
-      "executive-grooming",
+    specialties: [
+      "chiskop",
+      "low-cut-chillas",
+      "three-step-fade"
     ],
     image:
-      "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=900&q=85",
+      "/images/1790377180175.jpg",
+  },
+  {
+    id: "barber-2",
+    name: "Thabo",
+    role: "Fade & Line-Up Specialist",
+    specialties: [
+      "taper-fade",
+      "line-up-chiszzp",
+      "sponge-twist"
+    ],
+    image:
+      "/images/1790377233299.jpg",
+  },
+  {
+    id: "barber-3",
+    name: "Jabu",
+    role: "Stylist & Texture Specialist",
+    specialties: [
+      "three-step-fade",
+      "taper-fade",
+      "sponge-twist",
+      "line-up-chiszzp"
+    ],
+    image:
+      "/images/1790377260573.jpg",
+  },
+  {
+    id: "barber-4",
+    name: "Kabelo",
+    role: "Style Consultant",
+    specialties: [
+      "three-step-fade",
+      "taper-fade",
+      "sponge-twist",
+      "line-up-chiszzp"
+    ],
+    image:
+      "/images/1790377292778.jpg",
+  },
+  {
+    id: "barber-5",
+    name: "Lefa",
+    role: "Hairdresser",
+    specialties: [
+      "taper-fade",
+      "sponge-twist",
+      "line-up-chiszzp"
+    ],
+    image:
+      "/images/1790377341450.jpg",
+  },
+  {
+    id: "barber-6",
+    name: "Bafana",
+    role: "Hairdresser",
+    specialties: [
+      "three-step-fade",
+      "taper-fade",
+      "sponge-twist"
+    ],
+    image:
+      "/images/1790377571252.jpg",
+  },
+  {
+    id: "barber-7",
+    name: "Xola",
+    role: "Creative Director",
+    specialties: [
+      "three-step-fade",
+      "taper-fade",
+      "sponge-twist",
+      "line-up-chiszzp"
+    ],
+    image:
+      "/images/1790377575217.jpg",
+  },
+  {
+    id: "barber-8",
+    name: "Tshepo",
+    role: "Colorist",
+    specialties: [
+      "three-step-fade",
+      "taper-fade",
+      "line-up-chiszzp"
+    ],
+    image:
+      "/images/1790377578930.jpg",
   },
 ];
-
 export const story = {
   eyebrow: "Our story",
   title: "BUILT FROM THE CHAIR UP.",
@@ -202,4 +263,6 @@ export const formatPrice = (amount) => `R${amount}`;
 export const startingPrice = Math.min(...services.map((s) => s.price));
 
 export const barbersFor = (serviceId) =>
-  barbers.filter((b) => b.services.includes(serviceId));
+  barbers.filter((barber) =>
+    barber.specialties?.includes(serviceId)
+  );

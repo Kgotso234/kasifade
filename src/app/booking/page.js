@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ChevronLeft } from "lucide-react";
 import {
   business,
   bookingSettings,
@@ -725,7 +726,7 @@ export default function BookingPage() {
         </p>
 
         <Link href="/" className="mt-10 inline-block text-sm text-cream/60 hover:text-mustard">
-          ← Back to home
+         <ChevronLeft size={16} /> Back to home
         </Link>
       </BookingShell>
     );
