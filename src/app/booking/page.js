@@ -283,13 +283,6 @@ function downloadIcs(event) {
   URL.revokeObjectURL(url);
 }
 
-function genReference() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let code = "";
-  for (let i = 0; i < 5; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  return `KF-${code}`;
-}
-
 /* ---------------------------------------------------------
    SHARED PAGE SHELL — photo panel + content column
    Mobile: photo stacks on top, content below (default flow)
@@ -546,6 +539,7 @@ export default function BookingPage() {
   const [errors, setErrors] = useState({});
   const [assignError, setAssignError] = useState("");
   const [confirmed, setConfirmed] = useState(null); // { reference, ...booking }
+  const [submitting, setSubmitting] = useState(false);
 
   const dateOptions = useMemo(() => buildDateOptions(), []);
   const readyForSlots = people.every((p) => p.service);
@@ -609,8 +603,8 @@ export default function BookingPage() {
     return Object.keys(e).length === 0;
   }
 
-  /* ---- confirm ---- */
-  function handleConfirm() {
+  /* ---- confirm: posts to /api/bookings, saves booking + customer ---- */
+  async function handleConfirm() {
     const freeIds = freeBarberIdsAt(dateKey, time);
     const assignment = tryAssignBarbers(people, freeIds);
     if (!assignment) {
@@ -621,20 +615,54 @@ export default function BookingPage() {
       return;
     }
 
-    const reference = genReference();
-    setConfirmed({
-      reference,
-      dateKey,
+    const payload = {
+      customerName: customer.name,
+      customerSurname: customer.surname,
+      customerEmail: customer.email,
+      customerPhone: customer.phone,
+      date: dateKey,
       time,
-      people: assignment,
-      customer,
-      totalPrice,
-      totalDuration,
-    });
-    setStep(6);
+      partySize: people.length,
+      people: people.map((p) => ({ serviceId: p.service, barberId: p.barber })),
+    };
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setAssignError(data.error || "Couldn't save your booking. Please try again.");
+        setStep(4);
+        return;
+      }
+
+      setConfirmed({
+        reference: data.groupReference || data.bookings[0].bookingReference,
+        dateKey,
+        time,
+        people: data.bookings.map((b) => ({
+          service: b.serviceId,
+          assignedBarber: b.barberId,
+        })),
+        customer,
+        totalPrice,
+        totalDuration,
+      });
+      setStep(6);
+    } catch (e) {
+      setAssignError("Network error — please check your connection and try again.");
+      setStep(4);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
-  function next() {
+  async function next() {
     if (step === 4) {
       const freeIds = freeBarberIdsAt(dateKey, time);
       if (!tryAssignBarbers(people, freeIds)) {
@@ -644,7 +672,7 @@ export default function BookingPage() {
     }
     if (step === 5) {
       if (!validateDetails()) return;
-      handleConfirm();
+      await handleConfirm();
       return;
     }
     setStep((s) => Math.min(s + 1, STEPS.length));
@@ -726,7 +754,7 @@ export default function BookingPage() {
         </p>
 
         <Link href="/" className="mt-10 inline-block text-sm text-cream/60 hover:text-mustard">
-         <ChevronLeft size={16} /> Back to home
+          Back to home
         </Link>
       </BookingShell>
     );
@@ -946,11 +974,11 @@ export default function BookingPage() {
       )}
 
       <div className="mt-8 flex justify-between">
-        <button type="button" onClick={back} disabled={step === 1} className={btnGhost}>
+        <button type="button" onClick={back} disabled={step === 1 || submitting} className={btnGhost}>
           Back
         </button>
-        <button type="button" onClick={next} disabled={!canContinue} className={btnPrimary}>
-          {step === 5 ? "Confirm booking" : "Continue"}
+        <button type="button" onClick={next} disabled={!canContinue || submitting} className={btnPrimary}>
+          {submitting ? "Booking..." : step === 5 ? "Confirm booking" : "Continue"}
         </button>
       </div>
     </BookingShell>

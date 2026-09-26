@@ -13,45 +13,66 @@ export async function createBooking(booking) {
   const now = new Date();
 
   const newBooking = {
+    id:
+      booking.id ||
+      `booking_${Date.now()}_${Math.random()
+        .toString(36)
+        .slice(2, 8)}`,
+
     ...booking,
-    status: booking.status ?? "confirmed",
+
+    status:
+      booking.status ?? "confirmed",
+
     createdAt: now,
     updatedAt: now,
   };
 
-  await db.collection(COLLECTION_NAME).insertOne(newBooking);
+  await db
+    .collection(COLLECTION_NAME)
+    .insertOne(newBooking);
 
   return newBooking;
 }
 
 /**
- * Get a booking by its booking reference.
+ * Get a booking by reference.
  */
-export async function getBookingByReference(bookingReference) {
+export async function getBookingByReference(
+  bookingReference
+) {
   const client = await clientPromise;
   const db = client.db(DB_NAME);
 
-  return db.collection(COLLECTION_NAME).findOne({
-    bookingReference,
-  });
+  return db
+    .collection(COLLECTION_NAME)
+    .findOne({
+      bookingReference,
+    });
 }
 
 /**
- * Get a booking by its ID.
+ * Get a booking by ID.
  */
-export async function getBookingById(bookingId) {
+export async function getBookingById(
+  bookingId
+) {
   const client = await clientPromise;
   const db = client.db(DB_NAME);
 
-  return db.collection(COLLECTION_NAME).findOne({
-    id: bookingId,
-  });
+  return db
+    .collection(COLLECTION_NAME)
+    .findOne({
+      id: bookingId,
+    });
 }
 
 /**
  * Get bookings for a specific date.
  */
-export async function getBookingsByDate(date) {
+export async function getBookingsByDate(
+  date
+) {
   const client = await clientPromise;
   const db = client.db(DB_NAME);
 
@@ -60,7 +81,10 @@ export async function getBookingsByDate(date) {
     .find({
       date,
       status: {
-        $in: ["pending", "confirmed"],
+        $in: [
+          "pending",
+          "confirmed",
+        ],
       },
     })
     .sort({ time: 1 })
@@ -68,9 +92,13 @@ export async function getBookingsByDate(date) {
 }
 
 /**
- * Get bookings for a specific barber on a specific date.
+ * Get bookings for a specific barber
+ * on a specific date.
  */
-export async function getBarberBookings(barberId, date) {
+export async function getBarberBookings(
+  barberId,
+  date
+) {
   const client = await clientPromise;
   const db = client.db(DB_NAME);
 
@@ -80,7 +108,10 @@ export async function getBarberBookings(barberId, date) {
       barberId,
       date,
       status: {
-        $in: ["pending", "confirmed"],
+        $in: [
+          "pending",
+          "confirmed",
+        ],
       },
     })
     .sort({ time: 1 })
@@ -90,22 +121,30 @@ export async function getBarberBookings(barberId, date) {
 /**
  * Cancel a booking.
  */
-export async function cancelBooking(bookingReference) {
+export async function cancelBooking(
+  bookingReference
+) {
   const client = await clientPromise;
   const db = client.db(DB_NAME);
 
-  const result = await db.collection(COLLECTION_NAME).findOneAndUpdate(
-    { bookingReference },
-    {
-      $set: {
-        status: "cancelled",
-        updatedAt: new Date(),
-      },
-    },
-    {
-      returnDocument: "after",
-    }
-  );
+  const result =
+    await db
+      .collection(COLLECTION_NAME)
+      .findOneAndUpdate(
+        { bookingReference },
+        {
+          $set: {
+            status:
+              "cancelled",
+            updatedAt:
+              new Date(),
+          },
+        },
+        {
+          returnDocument:
+            "after",
+        }
+      );
 
   return result;
 }
