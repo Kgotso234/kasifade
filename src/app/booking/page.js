@@ -329,16 +329,11 @@ function DateField({ dateKey, dateOptions, onSelect }) {
 
   useEffect(() => {
     if (!open) return;
-    function onDocClick(e) {
-      if (containerRef.current && !containerRef.current.contains(e.target)) setOpen(false);
-    }
     function onKey(e) {
       if (e.key === "Escape") setOpen(false);
     }
-    document.addEventListener("mousedown", onDocClick);
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", onDocClick);
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
@@ -373,66 +368,69 @@ function DateField({ dateKey, dateOptions, onSelect }) {
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-20 mt-2 w-[320px] max-w-[90vw] rounded-btn border border-cream/15 bg-forest p-4 shadow-xl">
-          <div className="flex items-center justify-between">
-            <button
-              type="button"
-              disabled={viewMonth <= minMonth}
-              onClick={() => setViewMonth((m) => addMonths(m, -1))}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-cream/20 transition-colors hover:border-mustard disabled:opacity-20"
-              aria-label="Previous month"
-            >
-              <ArrowIcon direction="left" />
-            </button>
-            <span className="font-display text-sm">
-              {viewMonth.toLocaleDateString("en-ZA", { month: "long", year: "numeric" })}
-            </span>
-            <button
-              type="button"
-              disabled={viewMonth >= maxMonth}
-              onClick={() => setViewMonth((m) => addMonths(m, 1))}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-cream/20 transition-colors hover:border-mustard disabled:opacity-20"
-              aria-label="Next month"
-            >
-              <ArrowIcon direction="right" />
-            </button>
-          </div>
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute left-0 top-full z-20 mt-2 w-[320px] max-w-[90vw] rounded-btn border border-cream/15 bg-forest p-4 shadow-xl">
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                disabled={viewMonth <= minMonth}
+                onClick={() => setViewMonth((m) => addMonths(m, -1))}
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-cream/20 transition-colors hover:border-mustard disabled:opacity-20"
+                aria-label="Previous month"
+              >
+                <ArrowIcon direction="left" />
+              </button>
+              <span className="font-display text-sm">
+                {viewMonth.toLocaleDateString("en-ZA", { month: "long", year: "numeric" })}
+              </span>
+              <button
+                type="button"
+                disabled={viewMonth >= maxMonth}
+                onClick={() => setViewMonth((m) => addMonths(m, 1))}
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-cream/20 transition-colors hover:border-mustard disabled:opacity-20"
+                aria-label="Next month"
+              >
+                <ArrowIcon direction="right" />
+              </button>
+            </div>
 
-          <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[10px] font-semibold uppercase text-cream/40">
-            {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
-              <span key={d}>{d}</span>
-            ))}
+            <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[10px] font-semibold uppercase text-cream/40">
+              {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
+                <span key={d}>{d}</span>
+              ))}
+            </div>
+            <div className="mt-1 grid grid-cols-7 gap-1">
+              {cells.map((date, i) => {
+                if (!date) return <span key={`pad-${i}`} />;
+                const key = dateKeyOf(date);
+                const info = dateInfoMap.get(key);
+                const disabled = !info || info.closed;
+                const selected = dateKey === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    disabled={disabled}
+                    onClick={() => {
+                      onSelect(key);
+                      setOpen(false);
+                    }}
+                    className={`aspect-square rounded-full text-xs transition-colors ${
+                      selected
+                        ? "bg-mustard font-bold text-forest"
+                        : disabled
+                        ? "cursor-not-allowed text-cream/20"
+                        : "text-cream/80 hover:bg-cream/10"
+                    }`}
+                  >
+                    {date.getDate()}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <div className="mt-1 grid grid-cols-7 gap-1">
-            {cells.map((date, i) => {
-              if (!date) return <span key={`pad-${i}`} />;
-              const key = dateKeyOf(date);
-              const info = dateInfoMap.get(key);
-              const disabled = !info || info.closed;
-              const selected = dateKey === key;
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  disabled={disabled}
-                  onClick={() => {
-                    onSelect(key);
-                    setOpen(false);
-                  }}
-                  className={`aspect-square rounded-full text-xs transition-colors ${
-                    selected
-                      ? "bg-mustard font-bold text-forest"
-                      : disabled
-                      ? "cursor-not-allowed text-cream/20"
-                      : "text-cream/80 hover:bg-cream/10"
-                  }`}
-                >
-                  {date.getDate()}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        </>
       )}
     </div>
   );
@@ -447,16 +445,11 @@ function BarberField({ person, qualified, freeIds, onSelect }) {
 
   useEffect(() => {
     if (!open) return;
-    function onDocClick(e) {
-      if (containerRef.current && !containerRef.current.contains(e.target)) setOpen(false);
-    }
     function onKey(e) {
       if (e.key === "Escape") setOpen(false);
     }
-    document.addEventListener("mousedown", onDocClick);
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", onDocClick);
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
@@ -477,48 +470,51 @@ function BarberField({ person, qualified, freeIds, onSelect }) {
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-20 mt-2 w-full min-w-[280px] rounded-btn border border-cream/15 bg-forest p-2 shadow-xl">
-          <button
-            type="button"
-            onClick={() => {
-              onSelect("any");
-              setOpen(false);
-            }}
-            className={`block w-full rounded-btn px-4 py-3 text-left text-sm transition-colors ${
-              person.barber === "any" ? "bg-mustard/15 text-mustard" : "hover:bg-cream/5"
-            }`}
-          >
-            Any available barber
-            <span className="block text-xs text-cream/50">Fastest option</span>
-          </button>
-          {qualified.map((b) => {
-            const free = freeIds.includes(b.id);
-            return (
-              <button
-                key={b.id}
-                type="button"
-                disabled={!free}
-                onClick={() => {
-                  onSelect(b.id);
-                  setOpen(false);
-                }}
-                className={`block w-full rounded-btn px-4 py-3 text-left text-sm transition-colors ${
-                  !free
-                    ? "cursor-not-allowed text-cream/25"
-                    : person.barber === b.id
-                    ? "bg-mustard/15 text-mustard"
-                    : "hover:bg-cream/5"
-                }`}
-              >
-                {b.name}
-                <span className="block text-xs text-cream/50">
-                  {b.role}
-                  {!free ? " — booked at this time" : ""}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute left-0 top-full z-20 mt-2 w-full min-w-[280px] rounded-btn border border-cream/15 bg-forest p-2 shadow-xl">
+            <button
+              type="button"
+              onClick={() => {
+                onSelect("any");
+                setOpen(false);
+              }}
+              className={`block w-full rounded-btn px-4 py-3 text-left text-sm transition-colors ${
+                person.barber === "any" ? "bg-mustard/15 text-mustard" : "hover:bg-cream/5"
+              }`}
+            >
+              Any available barber
+              <span className="block text-xs text-cream/50">Fastest option</span>
+            </button>
+            {qualified.map((b) => {
+              const free = freeIds.includes(b.id);
+              return (
+                <button
+                  key={b.id}
+                  type="button"
+                  disabled={!free}
+                  onClick={() => {
+                    onSelect(b.id);
+                    setOpen(false);
+                  }}
+                  className={`block w-full rounded-btn px-4 py-3 text-left text-sm transition-colors ${
+                    !free
+                      ? "cursor-not-allowed text-cream/25"
+                      : person.barber === b.id
+                      ? "bg-mustard/15 text-mustard"
+                      : "hover:bg-cream/5"
+                  }`}
+                >
+                  {b.name}
+                  <span className="block text-xs text-cream/50">
+                    {b.role}
+                    {!free ? " — booked at this time" : ""}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </>
       )}
     </div>
   );
@@ -527,7 +523,7 @@ function BarberField({ person, qualified, freeIds, onSelect }) {
 /* ---------------------------------------------------------
    MAIN COMPONENT
 --------------------------------------------------------- */
-const STEPS = ["Party", "Service", "Date & time", "Barber", "Details", "Confirm"];
+const STEPS = ["Party", "Service", "Date & time", "Barber", "Details", "Review"];
 
 export default function BookingPage() {
   const [step, setStep] = useState(1);
@@ -626,18 +622,36 @@ export default function BookingPage() {
       people: people.map((p) => ({ serviceId: p.service, barberId: p.barber })),
     };
 
+    console.log("[booking] submitting payload:", payload);
     setSubmitting(true);
+
     try {
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const data = await res.json();
+
+      console.log("[booking] response status:", res.status, res.headers.get("content-type"));
+
+      let data;
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const raw = await res.text();
+        console.error("[booking] non-JSON response from /api/bookings:", raw.slice(0, 500));
+        setAssignError(
+          `Server returned an unexpected response (status ${res.status}). Check server logs.`
+        );
+        return;
+      }
+
+      console.log("[booking] response data:", data);
 
       if (!res.ok || !data.success) {
-        setAssignError(data.error || "Couldn't save your booking. Please try again.");
-        setStep(4);
+        console.error("[booking] booking failed:", data);
+        setAssignError(data.error || `Couldn't save your booking (status ${res.status}).`);
         return;
       }
 
@@ -653,10 +667,11 @@ export default function BookingPage() {
         totalPrice,
         totalDuration,
       });
-      setStep(6);
     } catch (e) {
-      setAssignError("Network error — please check your connection and try again.");
-      setStep(4);
+      console.error("[booking] fetch threw:", e);
+      setAssignError(
+        `Network error — ${e.message || "please check your connection and try again."}`
+      );
     } finally {
       setSubmitting(false);
     }
@@ -672,12 +687,17 @@ export default function BookingPage() {
     }
     if (step === 5) {
       if (!validateDetails()) return;
+      setStep(6);
+      return;
+    }
+    if (step === 6) {
       await handleConfirm();
       return;
     }
     setStep((s) => Math.min(s + 1, STEPS.length));
   }
   function back() {
+    setAssignError("");
     setStep((s) => Math.max(s - 1, 1));
   }
 
@@ -687,10 +707,11 @@ export default function BookingPage() {
     3: Boolean(dateKey && time),
     4: true,
     5: true,
+    6: true,
   }[step];
 
   /* ---------------------------------------------------------
-     CONFIRMATION SCREEN
+     CONFIRMATION SCREEN (after successful save)
   --------------------------------------------------------- */
   if (confirmed) {
     const event = buildCalendarEvent(confirmed);
@@ -787,18 +808,42 @@ export default function BookingPage() {
         {step === 1 && (
           <div>
             <h2 className="font-display text-2xl">How many people?</h2>
-            <div className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-6">
-              {Array.from({ length: bookingSettings.maxPartySize }, (_, i) => i + 1).map((n) => (
+
+            <div className="mt-5 flex items-center justify-between rounded-btn border border-cream/20 p-5">
+              <div>
+                <p className="font-display text-lg">How many people?</p>
+                <p className="mt-1 text-xs text-cream/60">
+                  Each person gets their own barber and service
+                </p>
+              </div>
+
+              <div className="flex items-center gap-4">
                 <button
-                  key={n}
                   type="button"
-                  onClick={() => setParty(n)}
-                  className={`${card} text-center ${partySize === n ? cardSelected : cardIdle}`}
+                  onClick={() => setParty(Math.max(1, partySize - 1))}
+                  disabled={partySize <= 1}
+                  aria-label="Decrease party size"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-cream/30 text-lg transition-colors hover:border-mustard disabled:cursor-not-allowed disabled:opacity-30"
                 >
-                  <span className="font-display text-xl">{n}</span>
+                  −
                 </button>
-              ))}
+
+                <span className="font-display w-6 text-center text-xl">{partySize}</span>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setParty(Math.min(bookingSettings.maxPartySize, partySize + 1))
+                  }
+                  disabled={partySize >= bookingSettings.maxPartySize}
+                  aria-label="Increase party size"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-cream/30 text-lg transition-colors hover:border-mustard disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  +
+                </button>
+              </div>
             </div>
+
             <p className="mt-4 text-sm text-cream/60">
               Booking for more than {bookingSettings.maxPartySize}?{" "}
               <a href={business.whatsappHref} className="text-mustard hover:underline">
@@ -952,6 +997,108 @@ export default function BookingPage() {
             />
           </div>
         )}
+
+        {/* STEP 6: review before submitting */}
+        {step === 6 && (
+          <div>
+            <h2 className="font-display text-2xl">Review your booking</h2>
+            <p className="mt-2 text-sm text-cream/60">
+              Check everything below, then confirm to book your chair.
+            </p>
+
+            {assignError && (
+              <p className="mt-4 rounded-btn border border-brick/50 bg-brick/10 p-4 text-sm text-brick">
+                {assignError}
+              </p>
+            )}
+
+            <div className="mt-6 space-y-4">
+              {/* Date & time */}
+              <div className="flex items-center justify-between rounded-btn border border-cream/15 bg-forest-light p-5">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-cream/50">
+                    Date &amp; time
+                  </p>
+                  <p className="font-display mt-1 text-lg">
+                    {dateKey ? fullDate(new Date(dateKey)) : "—"} · {time || "—"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setStep(3)}
+                  className="text-xs font-semibold uppercase tracking-wide text-mustard hover:underline"
+                >
+                  Edit
+                </button>
+              </div>
+
+              {/* Services + barbers per person */}
+              <div className="rounded-btn border border-cream/15 bg-forest-light p-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-cream/50">
+                    {people.length > 1 ? `${people.length} guests` : "Service"}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setStep(2)}
+                    className="text-xs font-semibold uppercase tracking-wide text-mustard hover:underline"
+                  >
+                    Edit
+                  </button>
+                </div>
+                <ul className="mt-3 space-y-3">
+                  {people.map((p, i) => {
+                    const svc = services.find((s) => s.id === p.service);
+                    const barber =
+                      p.barber && p.barber !== "any"
+                        ? barbers.find((b) => b.id === p.barber)
+                        : null;
+                    return (
+                      <li key={i} className="flex items-center justify-between text-sm">
+                        <span>
+                          {people.length > 1 ? `Person ${i + 1}: ` : ""}
+                          {svc?.name || "—"} with {barber ? barber.name : "any available barber"}
+                        </span>
+                        <span className="font-display text-mustard">
+                          {formatPrice(svc?.price || 0)}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="mt-4 flex items-center justify-between border-t border-cream/15 pt-4 text-sm font-bold">
+                  <span>Total</span>
+                  <span className="font-display text-lg text-mustard">
+                    {formatPrice(totalPrice)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Customer details */}
+              <div className="rounded-btn border border-cream/15 bg-forest-light p-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-cream/50">
+                    Your details
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setStep(5)}
+                    className="text-xs font-semibold uppercase tracking-wide text-mustard hover:underline"
+                  >
+                    Edit
+                  </button>
+                </div>
+                <p className="font-display mt-2 text-lg">
+                  {customer.name} {customer.surname}
+                </p>
+                <p className="mt-1 text-sm text-cream/70">{customer.phone}</p>
+                {customer.email && (
+                  <p className="mt-1 text-sm text-cream/70">{customer.email}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Summary + nav */}
@@ -978,7 +1125,7 @@ export default function BookingPage() {
           Back
         </button>
         <button type="button" onClick={next} disabled={!canContinue || submitting} className={btnPrimary}>
-          {submitting ? "Booking..." : step === 5 ? "Confirm booking" : "Continue"}
+          {submitting ? "Booking..." : step === 6 ? "Confirm booking" : "Continue"}
         </button>
       </div>
     </BookingShell>
