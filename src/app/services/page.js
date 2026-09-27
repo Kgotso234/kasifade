@@ -41,18 +41,17 @@ export default async function ServicesPage() {
               {services.map((service) => (
                 <article
                   key={service.id}
-                  className="group overflow-hidden rounded-btn bg-forest text-cream"
+                  className="overflow-hidden rounded-btn bg-forest text-cream"
                 >
-                  {/* Placeholder block — swap for a real photo once you have one per service */}
-                  <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-gradient-to-br from-forest-light to-forest">
+                  <div className="group aspect-[3/4] overflow-hidden">
                     <img
-                        src={service.image}
-                        alt={`${service.name}`}
-                        className="h-[250px] w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
+                      src={service.image}
+                      alt={service.name}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
                   </div>
 
-                  <div className="p-6">
+                  <div className="flex h-full flex-col p-6">
                     <div className="flex items-start justify-between gap-4">
                       <h2 className="font-display text-2xl">{service.name}</h2>
                       <span className="whitespace-nowrap font-display text-xl text-mustard">
@@ -60,7 +59,7 @@ export default async function ServicesPage() {
                       </span>
                     </div>
 
-                    <p className="mt-3 text-sm leading-6 text-cream/60">
+                    <p className="mt-3 flex-1 text-sm leading-6 text-cream/60">
                       {service.description}
                     </p>
 
@@ -70,7 +69,7 @@ export default async function ServicesPage() {
                       </span>
                       <Link
                         href={business.bookingHref}
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-mustard"
+                        className="inline-flex items-center gap-1 whitespace-nowrap text-xs font-bold uppercase tracking-[0.15em] text-mustard"
                       >
                         Book this <ChevronRight size={16} />
                       </Link>
