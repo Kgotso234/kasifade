@@ -39,7 +39,7 @@ export default async function BarbersPage() {
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {barbers.map((barber) => (
                 <article key={barber.id}>
-                  <div className="group aspect-[3/4] overflow-hidden rounded-btn bg-forest-light">
+                  <div className="group aspect-square overflow-hidden rounded-btn bg-forest-light">
                     <img
                       src={barber.image}
                       alt={`${barber.name}, ${barber.role}`}

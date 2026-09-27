@@ -37,13 +37,13 @@ export default async function ServicesPage() {
               No services available right now. Please check back shortly.
             </p>
           ) : (
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {services.map((service) => (
                 <article
                   key={service.id}
                   className="overflow-hidden rounded-btn bg-forest text-cream"
                 >
-                  <div className="group aspect-[3/4] overflow-hidden">
+                  <div className="group aspect-square overflow-hidden">
                     <img
                       src={service.image}
                       alt={service.name}
@@ -51,19 +51,19 @@ export default async function ServicesPage() {
                     />
                   </div>
 
-                  <div className="flex h-full flex-col p-6">
-                    <div className="flex items-start justify-between gap-4">
-                      <h2 className="font-display text-2xl">{service.name}</h2>
-                      <span className="whitespace-nowrap font-display text-xl text-mustard">
+                  <div className="flex h-full flex-col p-5">
+                    <div className="flex items-start justify-between gap-3">
+                      <h2 className="font-display text-lg">{service.name}</h2>
+                      <span className="whitespace-nowrap font-display text-base text-mustard">
                         {formatPrice(service.price)}
                       </span>
                     </div>
 
-                    <p className="mt-3 flex-1 text-sm leading-6 text-cream/60">
+                    <p className="mt-2 flex-1 text-xs leading-5 text-cream/60">
                       {service.description}
                     </p>
 
-                    <div className="mt-6 flex items-center justify-between border-t border-cream/10 pt-4">
+                    <div className="mt-4 flex items-center justify-between border-t border-cream/10 pt-3">
                       <span className="text-xs text-cream/50">
                         {service.duration} min
                       </span>
@@ -71,7 +71,7 @@ export default async function ServicesPage() {
                         href={business.bookingHref}
                         className="inline-flex items-center gap-1 whitespace-nowrap text-xs font-bold uppercase tracking-[0.15em] text-mustard"
                       >
-                        Book this <ChevronRight size={16} />
+                        Book this <ChevronRight size={14} />
                       </Link>
                     </div>
                   </div>
