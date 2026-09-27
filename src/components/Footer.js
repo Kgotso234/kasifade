@@ -36,20 +36,11 @@ export default function Footer() {
                 src="/images/logo.png"
                 alt={business.name}
                 width={200}
-                height={100}
-                className="h-50 w-auto object-contain md:h-50"
+                height={60}
+                className="h-14 w-auto object-contain"
                 priority
               />
-              {/* <div className="leading-none">
-                <div className="font-display text-xl tracking-wider">
-                  {business.shortName.toUpperCase()}
-                </div>
-                <div className="mt-1 text-[10px] font-semibold tracking-[0.3em] text-cream/70">
-                  {business.area.toUpperCase()}
-                </div>
-              </div> */}
             </Link>
-
             <p className="mt-6 max-w-md text-sm leading-7 text-cream/70">
               More than a haircut. A lifestyle. Precision, passion, pride —
               your neighbourhood barbershop in {business.area}.
