@@ -1,4 +1,5 @@
 import { Bungee, Plus_Jakarta_Sans } from "next/font/google";
+import PageLoader from "@/components/PageLoader";
 import WelcomePopup from "@/components/WelcomePopup";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${bungee.variable} ${jakarta.variable}`}>
       <body className="bg-forest font-sans text-cream antialiased">
+        <PageLoader />
         <Navbar />
         <main>{children}</main>
         <Footer />
