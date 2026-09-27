@@ -311,7 +311,7 @@ function BookingShell({ children }) {
         </div>
 
         {/* Content column */}
-        <div className="lg:order-1 lg:w-[58%] lg:overflow-y-auto">
+        <div className="lg:order-1 lg:w-[58%]">
           <div className="px-6 py-10 lg:px-12 lg:py-16">{children}</div>
         </div>
       </div>
