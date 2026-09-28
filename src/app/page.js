@@ -20,13 +20,51 @@ const btnGhost =
 const arrowBtn =
   "flex h-10 w-10 items-center justify-center rounded-full border border-mustard/50 text-mustard transition-colors hover:bg-mustard hover:text-forest";
 
-function Carousel({ children }) {
+function Carousel({ children, interval = 3500 }) {
   const trackRef = useRef(null);
+  const pausedRef = useRef(false);
+
   const scrollBy = (dir) => {
-    trackRef.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.firstElementChild;
+    const step = card ? card.offsetWidth + 16 : 320; // 16 = gap-4
+    el.scrollBy({ left: dir * step, behavior: "smooth" });
   };
+
+  // Auto-advance left → right, then loop back to the start
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const id = setInterval(() => {
+      const el = trackRef.current;
+      if (!el || pausedRef.current) return;
+
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4;
+      if (atEnd) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        const card = el.firstElementChild;
+        const step = card ? card.offsetWidth + 16 : 320;
+        el.scrollBy({ left: step, behavior: "smooth" });
+      }
+    }, interval);
+
+    return () => clearInterval(id);
+  }, [interval]);
+
+  const pause = () => (pausedRef.current = true);
+  const resume = () => (pausedRef.current = false);
+
   return (
-    <div>
+    <div
+      onMouseEnter={pause}
+      onMouseLeave={resume}
+      onFocus={pause}
+      onBlur={resume}
+      onTouchStart={pause}
+      onTouchEnd={() => setTimeout(resume, 4000)}
+    >
       <div className="mb-4 hidden justify-end gap-3 sm:flex">
         <button type="button" onClick={() => scrollBy(-1)} className={arrowBtn} aria-label="Scroll left">
           <ChevronLeft size={16} />
