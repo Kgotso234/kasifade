@@ -31,13 +31,13 @@ export default function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className={`inline-flex items-center gap-3 ${focus}`}>
+            <Link href="/" className={`inline-block ${focus}`}>
               <Image
                 src="/images/logo.png"
                 alt={business.name}
-                width={200}
-                height={60}
-                className="h-14 w-auto object-contain"
+                width={400}
+                height={120}
+                className="h-auto w-56 sm:w-64 lg:w-72"
                 priority
               />
             </Link>
